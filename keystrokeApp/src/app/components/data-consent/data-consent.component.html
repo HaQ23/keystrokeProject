@@ -1,0 +1,48 @@
+<section class="dataConsent">
+  <div class="dataConsent__container">
+    <h2 class="dataConsent__title">Consent to processing of personal data</h2>
+    <ol class="dataConsent__list">
+      <li class="dataConsent__list-item">
+        <h3 class="dataConsent__list-item-title">Purpose of Data Processing</h3>
+        <p class="dataConsent__description">
+          I hereby consent to the processing of my personal data in the form of
+          data related to the dynamics of keystrokes while typing on a computer
+          keyboard. These data will be collected and processed by students of
+          the "Politechnika Rzeszowka imienia Ignacego Łukasiewicza" for the
+          purpose of analyzing and developing user recognition algorithms based
+          on their typing style. The results of the study may be used for thesis
+          projects, scientific publications, and conference presentations.
+        </p>
+      </li>
+      <li class="dataConsent__list-item">
+        <h3 class="dataConsent__list-item-title">Voluntariness of Consent</h3>
+        <p class="dataConsent__description">
+          Giving consent is completely voluntary and I can withdraw it at any
+          time, which will result in the cessation of processing my data from
+          the moment of withdrawal. Withdrawing consent does not affect the
+          legality of the processing that was carried out on the basis of
+          consent before its withdrawal.
+        </p>
+      </li>
+    </ol>
+    <p class="text"></p>
+    <div class="buttons-box">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="agree()"
+        class="dataConsent__btn"
+      >
+        Agree
+      </button>
+      <button
+        (click)="disagree()"
+        mat-flat-button
+        color="warn"
+        class="dataConsent__btn"
+      >
+        Disagree
+      </button>
+    </div>
+  </div>
+</section>

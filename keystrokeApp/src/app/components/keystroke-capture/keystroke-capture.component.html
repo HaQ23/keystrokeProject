@@ -1,0 +1,29 @@
+<section class="keystrokeCapture">
+  <div class="container">
+    <h2 class="title">Phrase</h2>
+    <p class="description">Rewrite the given phrase</p>
+    <p class="example-phrase">
+      <span class="highlight">{{ enteredText }}</span>
+      <span>{{ remainingText }}</span>
+    </p>
+    <mat-form-field class="field">
+      <mat-label>Rewrite phrase</mat-label>
+      <textarea
+        [(ngModel)]="userSentence"
+        name="phrase"
+        matInput
+        (input)="onInput($event)"
+        (keydown)="onKeydown($event)"
+        (keyup)="onKeyup($event)"
+      ></textarea>
+    </mat-form-field>
+    <div class="box">
+      <button mat-flat-button color="primary" (click)="send()" class="">
+        Send
+      </button>
+      <button (click)="clear()" mat-flat-button color="warn" class="">
+        Clear
+      </button>
+    </div>
+  </div>
+</section>

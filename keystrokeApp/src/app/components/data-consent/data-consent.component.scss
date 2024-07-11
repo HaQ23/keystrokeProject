@@ -1,0 +1,21 @@
+.dataConsent {
+  display: flex;
+  &__title {
+    margin-bottom: 2rem;
+  }
+  &__container {
+    max-width: 600px;
+    margin: 10rem auto;
+  }
+  &__list {
+    padding-left: 20px;
+  }
+  &__list-item-title {
+    font-weight: 500;
+  }
+  .buttons-box {
+    margin-top: 5rem;
+    display: flex;
+    gap: 2rem;
+  }
+}
