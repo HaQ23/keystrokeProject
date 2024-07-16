@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, HTTPException, Path, Body
-from .models import User, Sentence, Test, LoginData, UserConsentData
+from .models import User, Sentence, Test, LoginData, UserConsentData, UserDataUpdate
 import random
 from bson.objectid import ObjectId
 import logging
@@ -31,6 +31,35 @@ async def register_user(request: Request, login_data: LoginData):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error registering user: {e}")
+
+@router.patch("/api/user/{email}")
+async def update_user(
+        request: Request,
+        email: str = Path(...),
+        user_update: UserDataUpdate = Body(...)
+):
+    users = request.app.db.users
+    update_data = user_update.dict(exclude_unset=True)
+
+    try:
+        update_result = users.update_one(
+            {'email': email},
+            {'$set': update_data}
+        )
+
+        if update_result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        updated_user = users.find_one({'email': email})
+        updated_user['_id'] = str(updated_user['_id'])
+        return {
+            "email": updated_user["email"],
+            "hasConsented": updated_user["hasConsented"],
+            "role": updated_user["role"]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating user: {str(e)}")
+
 @router.patch("/api/set-consent/{email}")
 async def set_user_consent(
     request: Request,

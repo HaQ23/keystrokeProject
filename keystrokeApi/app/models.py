@@ -35,6 +35,8 @@ class User(BaseModel):
     class Config:
         allow_population_by_field_name = True
         json_encoders = {ObjectId: str}
+class UserDataUpdate(BaseModel):
+    role: Optional[str]
 
 class Sentence(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
