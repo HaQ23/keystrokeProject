@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from bson import ObjectId
-
+from datetime import datetime
 class PyObjectId(ObjectId):
     @classmethod
     def __get_validators__(cls):
@@ -21,15 +21,17 @@ class PyObjectId(ObjectId):
 class LoginData(BaseModel):
     email: str
 
-class UserDataUpdate(BaseModel):
-    consent: Optional[bool] = None
-    role: Optional[str] = None
+class UserConsentData(BaseModel):
+    hasConsented: bool
+    consent: str
+    consentDate: datetime
 class User(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
     email: str
-    consent: bool
+    hasConsented: bool
     role: str
-
+    consent: Optional[str]
+    consentDate: Optional[datetime]
     class Config:
         allow_population_by_field_name = True
         json_encoders = {ObjectId: str}
