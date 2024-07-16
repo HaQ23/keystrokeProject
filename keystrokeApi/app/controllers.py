@@ -20,7 +20,7 @@ async def register_user(request: Request, login_data: LoginData):
                 "hasConsented": existing_user["hasConsented"],
                 "role": existing_user["role"]
             }
-        new_user = User(email=login_data.email, hasConsented=False, role="", consent=None, consentData=None)
+        new_user = User(email=login_data.email, hasConsented=False, role="", consent=None, consentDate=None)
         user_dict = new_user.dict(by_alias=True)
         result = users.insert_one(user_dict)
         user_dict['_id'] = str(result.inserted_id)
