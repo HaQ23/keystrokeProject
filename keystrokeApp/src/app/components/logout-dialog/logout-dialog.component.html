@@ -1,0 +1,16 @@
+<div mat-dialog-content>
+  <p class="description">
+    Are you sure you want to delete your consent for data processing ?
+  </p>
+</div>
+<div mat-dialog-actions class="mat-dialog-actions">
+  <button
+    (click)="deleteConsent()"
+    color="warn"
+    mat-flat-button
+    mat-dialog-close
+  >
+    Yes, delete it
+  </button>
+  <button color="primary" mat-flat-button mat-dialog-close>No</button>
+</div>

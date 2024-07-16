@@ -9,3 +9,16 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+mat-snack-bar-container {
+  max-width: max-content !important;
+  min-width: none !important;
+  div {
+    min-width: 100px !important;
+  }
+  .mdc-snackbar__surface {
+    background: #4758b8 !important;
+  }
+  .mat-mdc-snack-bar-label {
+    max-width: max-content;
+  }
+}

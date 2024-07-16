@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/models';
+import { User, UserConsentData, UserUpdateData } from '../models/models';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -32,9 +32,32 @@ export class AuthService {
       this.router.navigate(['/login']);
     }
   }
-  updateUser(userData: User): Observable<User> {
+  updateUser(userEmail: string, userData: UserUpdateData): Observable<User> {
     return this.http
-      .patch<User>(`${this.baseUrl}/user/${userData.email}`, userData)
+      .patch<User>(`${this.baseUrl}/user/${userEmail}`, userData)
+      .pipe(
+        tap((user) => {
+          this.user$.next(user);
+          this.saveUserToSession(user);
+        })
+      );
+  }
+  setUserConsent(
+    userEmail: string,
+    userData: UserConsentData
+  ): Observable<User> {
+    return this.http
+      .patch<User>(`${this.baseUrl}/set-consent/${userEmail}`, userData)
+      .pipe(
+        tap((user) => {
+          this.user$.next(user);
+          this.saveUserToSession(user);
+        })
+      );
+  }
+  removeUserConsent(userEmail: string): Observable<User> {
+    return this.http
+      .patch<User>(`${this.baseUrl}/delete-consent/${userEmail}`, {})
       .pipe(
         tap((user) => {
           this.user$.next(user);

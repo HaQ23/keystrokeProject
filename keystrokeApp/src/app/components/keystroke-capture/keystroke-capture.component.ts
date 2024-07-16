@@ -13,7 +13,9 @@ import {
 import { DialogComponent } from '../dialog/dialog.component';
 import { AuthService } from '../../services/auth.service';
 import { KeystrokeService } from '../../services/keystroke.service';
-import { error } from 'console';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-keystroke-capture',
@@ -25,6 +27,7 @@ import { error } from 'console';
     CommonModule,
     MatButtonModule,
     MatDialogModule,
+    NavbarComponent,
   ],
   templateUrl: './keystroke-capture.component.html',
   styleUrls: ['./keystroke-capture.component.scss'],
@@ -43,7 +46,8 @@ export class KeystrokeCaptureComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private authService: AuthService,
-    private keystrokeService: KeystrokeService
+    private keystrokeService: KeystrokeService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -98,15 +102,16 @@ export class KeystrokeCaptureComponent implements OnInit {
       this.userSentence,
       this.sentence.text
     );
-    if (accuracy >= 1) {
-      this.sendUserKeystrokeData(this.sentence.id, this.keystrokeData);
-      this.openDialog(
-        `Success! You have transcribed ${accuracy}% of the text correctly.`
-      );
+    if (this.keystrokeData.length > this.sentence.text.length / 2) {
+      if (accuracy >= 50) {
+        this.sendUserKeystrokeData(this.sentence.id, this.keystrokeData);
+      } else {
+        this.openDialog(
+          `You have only transcribed ${accuracy}% of the text correctly. Please try again.`
+        );
+      }
     } else {
-      this.openDialog(
-        `You have only transcribed ${accuracy}% of the text correctly. Please try again.`
-      );
+      this.openDialog(`Incorrectly entered data, try again`);
     }
 
     console.log('Dane klawiszy:', this.keystrokeData);
@@ -117,12 +122,12 @@ export class KeystrokeCaptureComponent implements OnInit {
       const userKeystrokeData: UserKeystrokeData = {
         userEmail,
         sentenceId,
-        testRunOn: 0,
+        testRunOn: keystrokeData[0].pressTime,
         keystrokeData,
       };
       this.keystrokeService.postKeystrokeData(userKeystrokeData).subscribe({
         next: (reponse) => {
-          console.log(reponse);
+          this.openDialog(`Success! Your text has been sent, thank you !`);
         },
         error: (error) => {
           console.error('Wystąpił błąd podczas wysyłania danych', error);

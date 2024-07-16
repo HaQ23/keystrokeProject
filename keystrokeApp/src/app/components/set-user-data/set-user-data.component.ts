@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../models/models';
+import { User, UserUpdateData } from '../../models/models';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -42,23 +42,23 @@ export class SetUserDataComponent {
       if (role) {
         const userData: User | null = this.authService.getUserData();
         if (userData) {
-          const newUserData: User = {
-            email: userData.email,
+          const userUpdateData: UserUpdateData = {
             role: role,
-            consent: userData.consent,
           };
-          this.authService.updateUser(newUserData).subscribe({
-            next: (user: User) => {
-              if (user.consent) {
-                this.router.navigate(['/keystroke-capture']);
-              } else {
-                this.router.navigate(['/data-consent']);
-              }
-            },
-            error: (error) => {
-              console.error('An error occurred while logging in', error);
-            },
-          });
+          this.authService
+            .updateUser(userData.email, userUpdateData)
+            .subscribe({
+              next: (user: User) => {
+                if (user.hasConsented) {
+                  this.router.navigate(['/keystroke-capture']);
+                } else {
+                  this.router.navigate(['/data-consent']);
+                }
+              },
+              error: (error) => {
+                console.error('An error occurred while logging in', error);
+              },
+            });
         }
       }
     }

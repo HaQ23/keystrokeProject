@@ -7,7 +7,7 @@ export const keystrokeCaptureGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const user = authService.getUserData();
 
-  if (user && user.consent) {
+  if (user && user.hasConsented) {
     return true;
   }
   router.navigate(['/data-consent']);

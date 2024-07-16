@@ -5,8 +5,17 @@ export interface Sentence {
 export interface User {
   email: string;
   role: string;
-  consent: boolean;
+  hasConsented: boolean;
 }
+export interface UserUpdateData {
+  role: string;
+}
+export interface UserConsentData {
+  hasConsented: boolean;
+  consent: string;
+  consentDate: string;
+}
+
 export interface KeystrokeData {
   key: string;
   pressTime: number;
