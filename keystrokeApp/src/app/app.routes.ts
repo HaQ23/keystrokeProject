@@ -9,7 +9,7 @@ import { SetUserDataComponent } from './components/set-user-data/set-user-data.c
 import { isLoggedGuard } from './guards/is-logged.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'keystroke-capture', pathMatch: 'full' },
   { path: 'login', component: LoginPageComponent, canActivate: [authGuard] },
   {
     path: 'set-user-data',

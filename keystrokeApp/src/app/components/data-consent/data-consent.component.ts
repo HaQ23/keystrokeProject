@@ -5,7 +5,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { AuthService } from '../../services/auth.service';
 import { User, UserConsentData, UserUpdateData } from '../../models/models';
-import { error } from 'console';
+import { CONSENT_TEXT } from '../data-consent/consent-text';
 @Component({
   selector: 'app-data-consent',
   standalone: true,
@@ -14,7 +14,6 @@ import { error } from 'console';
   styleUrl: './data-consent.component.scss',
 })
 export class DataConsentComponent {
-  private consentDescription: string = 'aDsad';
   constructor(
     private router: Router,
     private dialog: MatDialog,
@@ -25,7 +24,7 @@ export class DataConsentComponent {
     if (userData) {
       const userConsentData: UserConsentData = {
         hasConsented: true,
-        consent: this.consentDescription,
+        consent: CONSENT_TEXT,
         consentDate: new Date().toISOString(),
       };
       this.authService

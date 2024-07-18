@@ -1,9 +1,11 @@
 .keystrokeCapture {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100vh;
+  z-index: 0;
   .description {
     font-size: 1.6rem;
     font-weight: 500;

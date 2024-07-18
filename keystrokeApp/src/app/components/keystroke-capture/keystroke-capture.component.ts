@@ -59,7 +59,6 @@ export class KeystrokeCaptureComponent implements OnInit {
             id: data.id,
             text: data.text,
           };
-          console.log(data);
         },
         error: (err) => {
           console.error('An error occurred while downloading sentences', err);
@@ -113,8 +112,6 @@ export class KeystrokeCaptureComponent implements OnInit {
     } else {
       this.openDialog(`Incorrectly entered data, try again`);
     }
-
-    console.log('Dane klawiszy:', this.keystrokeData);
   }
   sendUserKeystrokeData(sentenceId: string, keystrokeData: KeystrokeData[]) {
     const userEmail = this.authService.getUserData()?.email;

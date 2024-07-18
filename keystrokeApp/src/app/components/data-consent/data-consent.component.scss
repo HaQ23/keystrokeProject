@@ -1,5 +1,7 @@
 .dataConsent {
   display: flex;
+  width: 95%;
+  margin: 0 auto;
   &__title {
     margin-bottom: 2rem;
   }
@@ -13,9 +15,20 @@
   &__list-item-title {
     font-weight: 500;
   }
+  &__description {
+    font-size: 1.6rem;
+  }
   .buttons-box {
-    margin-top: 5rem;
+    margin-top: 2rem;
     display: flex;
     gap: 2rem;
+  }
+  .text {
+    margin-top: 4rem;
+    font-size: 1.6rem;
+  }
+  .ul-list {
+    padding: 0 0 0 2rem;
+    list-style-type: disc;
   }
 }

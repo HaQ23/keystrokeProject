@@ -9,7 +9,10 @@ export const keystrokeCaptureGuard: CanActivateFn = (route, state) => {
 
   if (user && user.hasConsented) {
     return true;
+  } else if (user && !user.hasConsented) {
+    router.navigate(['/data-consent']);
+    return false;
   }
-  router.navigate(['/data-consent']);
+  router.navigate(['/login']);
   return false;
 };
