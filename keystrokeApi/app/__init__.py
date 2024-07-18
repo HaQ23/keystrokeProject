@@ -28,7 +28,7 @@ def create_app():
     app.include_router(controllers_router)
     origins = [
         "http://localhost:4200",
-        "https://keystroke-app-uk7wp57gha-uc.a.run.app/"
+        "https://keystroke-app-uk7wp57gha-uc.a.run.app"
     ]
 
     app.add_middleware(
