@@ -1,32 +1,16 @@
-# Używamy obrazu Node.js 18.19 do budowy aplikacji
-FROM node:18.19 as build
+FROM node:20.13.1-alpine3.19 as build
+WORKDIR /app/src
+COPY package*.json ./
+RUN npm ci
 
-# Ustawiamy katalog roboczy w kontenerze
-WORKDIR /app
+RUN npm install -g @angular/cli
+COPY . ./
+RUN ng build --configuration=production
 
-# Kopiujemy pliki package.json i package-lock.json do kontenera
-COPY package.json package-lock.json ./
-
-# Instalujemy zależności
-RUN npm install
-
-# Kopiujemy pozostałe pliki aplikacji do kontenera
-COPY . .
-
-# Budujemy aplikację
-RUN npm run build --prod
-
-# Używamy Nginx do serwowania aplikacji
-FROM nginx:alpine
-
-# Kopiujemy zbudowane pliki z poprzedniego etapu do katalogu Nginx
-COPY --from=build /app/dist/trace-key-stroke-app /usr/share/nginx/html
-
-# Zamiana domyślnego pliku konfiguracyjnego Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Wystawiamy port 8080
-EXPOSE 8080
-
-# Startujemy Nginx
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:20.13.1-alpine3.19
+RUN addgroup -S exampleusergroup && adduser -S exampleuser -G exampleusergroup
+USER exampleuser
+WORKDIR /usr/app
+COPY --from=build /app/src/dist/trace-key-stroke-app/ ./
+CMD ["node", "server/server.mjs"]
+EXPOSE 4000
