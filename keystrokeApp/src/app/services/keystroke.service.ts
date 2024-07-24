@@ -11,7 +11,6 @@ export class KeystrokeService {
   private baseUrl = environment.baseUrl;
   constructor(private http: HttpClient) {}
   postKeystrokeData(userKeystrokeData: UserKeystrokeData): Observable<{}> {
-    console.log(userKeystrokeData);
     return this.http.post(`${this.baseUrl}/test`, userKeystrokeData);
   }
 

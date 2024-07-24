@@ -24,10 +24,10 @@ export class LogoutDialogComponent {
     const userData: User | null = this.authService.getUserData();
     if (userData) {
       this.authService.removeUserConsent(userData.email).subscribe({
-        next: (user) => {
-          if (!user.hasConsented) {
-            this.openSnackBar();
+        next: (reponse) => {
+          if (!reponse.updated_user_details.hasConsented) {
             this.router.navigate(['/data-consent']);
+            this.openSnackBar();
           }
         },
 
@@ -40,7 +40,7 @@ export class LogoutDialogComponent {
   openSnackBar() {
     this.snackBar.openFromComponent(SnackBarComponent, {
       data: { message: 'Your consent has been removed' },
-      duration: 2000,
+      duration: 4000,
       horizontalPosition: 'right',
       verticalPosition: 'bottom',
     });

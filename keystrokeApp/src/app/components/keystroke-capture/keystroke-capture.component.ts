@@ -14,7 +14,6 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { AuthService } from '../../services/auth.service';
 import { KeystrokeService } from '../../services/keystroke.service';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -51,6 +50,9 @@ export class KeystrokeCaptureComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getSentence();
+  }
+  getSentence() {
     const userEmail = this.authService.getUserData()?.email;
     if (userEmail) {
       this.keystrokeService.getPhrase(userEmail).subscribe({
@@ -104,6 +106,8 @@ export class KeystrokeCaptureComponent implements OnInit {
     if (this.keystrokeData.length > this.sentence.text.length / 2) {
       if (accuracy >= 50) {
         this.sendUserKeystrokeData(this.sentence.id, this.keystrokeData);
+        this.clear();
+        this.getSentence();
       } else {
         this.openDialog(
           `You have only transcribed ${accuracy}% of the text correctly. Please try again.`
@@ -127,7 +131,7 @@ export class KeystrokeCaptureComponent implements OnInit {
           this.openDialog(`Success! Your text has been sent, thank you !`);
         },
         error: (error) => {
-          console.error('Wystąpił błąd podczas wysyłania danych', error);
+          this.openDialog(`Error! Your text has not been sent, try again. `);
         },
       });
     }

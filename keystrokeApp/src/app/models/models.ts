@@ -27,3 +27,8 @@ export interface UserKeystrokeData {
   testRunOn: number;
   keystrokeData: KeystrokeData[];
 }
+export interface deleteUserConsentReponse {
+  message: string;
+  deleted_tests_count: number;
+  updated_user_details: User;
+}
