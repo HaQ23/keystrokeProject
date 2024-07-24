@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dialog',
@@ -11,5 +12,12 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './dialog.component.scss',
 })
 export class DialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { message: string }) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { message: string },
+    private AuthService: AuthService
+  ) {}
+
+  logout() {
+    this.AuthService.logout();
+  }
 }
