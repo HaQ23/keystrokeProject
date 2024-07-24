@@ -117,14 +117,13 @@ async def add_test(request: Request, test: Test):
         return {"message": "Test added successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error adding test")
-
 @router.post("/api/removeConsent/{user_email}")
 async def remove_consent(request: Request, user_email: str):
     db = request.app.db
     users_collection = db.users
     tests_collection = db.tests
 
-
+    # Aktualizacja danych użytkownika
     updated_user = users_collection.find_one_and_update(
         {'email': user_email},
         {
@@ -137,12 +136,18 @@ async def remove_consent(request: Request, user_email: str):
         return_document=ReturnDocument.AFTER
     )
 
+
     if not updated_user:
         raise HTTPException(status_code=404, detail="User not found")
-
     delete_result = tests_collection.delete_many({'userEmail': user_email})
+
 
     return {
         "message": "User consent removed and all related tests deleted",
-        "deleted_tests_count": delete_result.deleted_count
+        "deleted_tests_count": delete_result.deleted_count,
+        "updated_user_details": {
+            "email": updated_user["email"],
+            "hasConsented": updated_user["hasConsented"],
+            "role": updated_user.get("role", "unknown")  
+        }
     }
