@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, HTTPException, Path, Body
 from .models import User, Sentence, Test, LoginData, UserConsentData, UserDataUpdate
 import random
 from bson.objectid import ObjectId
+from pymongo import ReturnDocument
 import logging
 router = APIRouter()
 
@@ -97,7 +98,8 @@ async def get_random_sentence(request: Request, user_email: str):
     tests = request.app.db.tests
     try:
         used_sentence_ids = tests.find({'userEmail': user_email}).distinct('sentenceId')
-        available_sentences = list(sentences.find({'_id': {'$nin': [ObjectId(sid) for sid in used_sentence_ids]}}))
+        used_sentence_ids = [ObjectId(sid) for sid in used_sentence_ids if ObjectId.is_valid(sid)]
+        available_sentences = list(sentences.find({'_id': {'$nin': used_sentence_ids}}))
         if not available_sentences:
             raise HTTPException(status_code=404, detail="No available sentences for this user")
         random_sentence = random.choice(available_sentences)
@@ -105,7 +107,7 @@ async def get_random_sentence(request: Request, user_email: str):
         random_sentence['id'] = random_sentence.pop('_id')
         return random_sentence
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Error retrieving random sentence")
+        raise HTTPException(status_code=500, detail=str(e))
 @router.post("/api/test")
 async def add_test(request: Request, test: Test):
     tests = request.app.db.tests
@@ -115,3 +117,32 @@ async def add_test(request: Request, test: Test):
         return {"message": "Test added successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error adding test")
+
+@router.post("/api/removeConsent/{user_email}")
+async def remove_consent(request: Request, user_email: str):
+    db = request.app.db
+    users_collection = db.users
+    tests_collection = db.tests
+
+
+    updated_user = users_collection.find_one_and_update(
+        {'email': user_email},
+        {
+            '$set': {
+                'hasConsented': False,
+                'consent': None,
+                'consentDate': None
+            }
+        },
+        return_document=ReturnDocument.AFTER
+    )
+
+    if not updated_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    delete_result = tests_collection.delete_many({'userEmail': user_email})
+
+    return {
+        "message": "User consent removed and all related tests deleted",
+        "deleted_tests_count": delete_result.deleted_count
+    }
